@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+*.db
+*.sqlite
+*.sqlite3
+data/
+artifacts/
+__pycache__/
+.DS_Store

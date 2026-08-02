@@ -67,6 +67,15 @@ repeated failures, temporal facts, and consolidated observations. It must:
 - fail open on timeout or service failure; and
 - preserve provenance to the Bookkeeper session/revision.
 
+The initial Hindsight pilot additionally keeps consolidation and automatic
+prompt injection off. Hindsight receives rendered message roles through a
+separate Bookkeeper consumer cursor, not raw archive filesystem access. Its
+stable document ID is the Bookkeeper record source ID, so an acknowledgement
+retry or later record revision is an explicit replace/upsert rather than a
+duplicate. A shared pilot bank may use project tags for manual retrieval, but
+hard project isolation requires distinct banks before any automatic recall is
+enabled.
+
 ### Transport and archive
 
 Bookkeeper is the only component that accepts canonical session bytes. Retrieval

@@ -22,8 +22,9 @@ decision records remain authoritative over learned context.
 
 ## Status
 
-Design and integration bootstrap. No runtime, storage provider, retrieval
-engine, or learned-memory product is required by this repository.
+Design and integration bootstrap. The first Hindsight pilot contract is now
+defined, but this repository still requires no particular runtime, storage
+provider, retrieval engine, model host, or learned-memory product.
 
 ## Principles
 

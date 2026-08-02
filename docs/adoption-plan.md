@@ -22,12 +22,25 @@
 ## Phase 3: learned-context pilot
 
 1. Choose a learned-memory implementation and an operator-supplied model/API.
-2. Use only fresh, task-scoped sessions initially.
-3. Start with project-scoped recall, low context budget, one extraction worker,
-   and no raw tool-output retention.
-4. Run a meaningful set of real tasks, then review relevance, staleness,
-   provenance, and failure behavior.
-5. Add selected historical backfill only after the live pilot is useful.
+   The initial reference profile uses Hindsight with one local extraction
+   request at a time.
+2. Create a distinct Bookkeeper consumer subscription. It receives only a
+   verified lease-scoped revision; Hindsight never mounts or owns the raw
+   archive.
+3. Render only user/assistant messages. Use a stable Bookkeeper record source
+   ID as Hindsight's replace/upsert document ID, attach source/revision/event
+   metadata, and disable raw document-text storage in Hindsight.
+4. Bound a controller run to one small, retained session. Retain synchronously;
+   write the Bookkeeper receipt only after Hindsight accepts the request. An
+   outage leaves the delivery queued for a later manual run.
+5. Keep observations/consolidation and automatic prompt injection disabled.
+   Manual recall is the only allowed read path during the pilot.
+6. Validate one source-backed recall and one irrelevant-query negative case,
+   then review relevance, staleness, provenance, latency, and resource use
+   across meaningful real tasks.
+7. Add project-specific banks, controlled historical backfill, consolidation,
+   or automatic recall only after the initial pilot is useful and its failure
+   and correction paths have been reviewed.
 
 ## Exit criteria
 

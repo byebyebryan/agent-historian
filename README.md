@@ -7,13 +7,10 @@ It separates three concerns that are often conflated:
 
 ```text
 Agent Bookkeeper
-  -> canonical session evidence, revisions, and consumer delivery
+  -> capture, canonical session evidence, archive indexing, search, and provenance
 
-MemPalace or equivalent retrieval system
-  -> verbatim evidence search and provenance
-
-Hindsight or equivalent learned-memory system
-  -> distilled, scoped context for future tasks
+Optional learned-context workflow
+  -> deliberate, agent-authored, evidence-backed project briefings
 ```
 
 The project is intentionally not a replacement for source control, repository
@@ -22,27 +19,31 @@ decision records remain authoritative over learned context.
 
 ## Status
 
-Design and integration bootstrap. The first Hindsight pilot contract is now
-defined, but this repository still requires no particular runtime, storage
-provider, retrieval engine, model host, or learned-memory product.
+Archive/search is the accepted first product boundary. The Hindsight transcript
+mining pilot established useful limits, but is not an adopted integration:
+transcript-only extraction cannot authoritatively model a mutable codebase.
+Any later learned-context workflow is separate from Bookkeeper and is fed by
+deliberate agent curation over current project state and source evidence.
 
 ## Principles
 
 - Preserve raw session evidence before deriving indexes or learned summaries.
 - Keep archive/search and learned memory independently rebuildable.
 - Make source revision and provenance visible to every derived result.
+- Treat the current checkout, repository documentation, and decision records as
+  authoritative; learned context is supporting, revision-scoped interpretation.
 - Fail open: a memory-system outage must not prevent an agent from working.
-- Scope recall and retention by project, user, and agent identity.
 - Keep transport, storage, and deployment configuration operator supplied.
 
 ## Documents
 
 - [Architecture](docs/architecture.md)
+- [Archive-search pivot and learned-context boundary](docs/archive-search-pivot.md)
 - [Market landscape](docs/market-landscape.md)
 - [Adoption plan](docs/adoption-plan.md)
 
 The companion [Agent Bookkeeper](https://github.com/byebyebryan/agent-bookkeeper)
-project defines the session-evidence transport and consumer data plane.
+project is the concrete capture, archive, and search product.
 
 ## Validation
 

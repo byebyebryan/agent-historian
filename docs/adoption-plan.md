@@ -19,31 +19,26 @@
 4. Prove that archive/unarchive, deletion policy, offline clients, and consumer
    rebuilds behave as documented.
 
-## Phase 3: learned-context pilot
+## Deferred: agent-led learned context
 
-1. Choose a learned-memory implementation and an operator-supplied model/API.
-   The initial reference profile uses Hindsight with one local extraction
-   request at a time.
-2. Create a distinct Bookkeeper consumer subscription. It receives only a
-   verified lease-scoped revision; Hindsight never mounts or owns the raw
-   archive.
-3. Render only user/assistant messages. Use a stable Bookkeeper record source
-   ID as Hindsight's replace/upsert document ID, attach source/revision/event
-   metadata, and disable raw document-text storage in Hindsight.
-4. Bound a controller run to one small, retained session. Retain synchronously;
-   write the Bookkeeper receipt only after Hindsight accepts the request. An
-   outage leaves the delivery queued for a later manual run.
-5. Keep observations/consolidation and automatic prompt injection disabled.
-   Manual recall is the only allowed read path during the pilot.
-6. Validate one source-backed recall and one irrelevant-query negative case,
-   then review relevance, staleness, provenance, latency, and resource use
-   across meaningful real tasks.
-7. Add project-specific banks, controlled historical backfill, consolidation,
-   or automatic recall only after the initial pilot is useful and its failure
-   and correction paths have been reviewed.
+Learned context is not on the critical path for archive/search. If it is
+revisited, run a small, explicit curation pilot rather than a raw-transcript
+backfill:
+
+1. Give an agent a bounded project question or end-of-task checkpoint.
+2. Have it inspect the current checkout, repository guidance, validation
+   evidence, and relevant Bookkeeper search results.
+3. Require revision-scoped, source-backed candidates for durable decisions,
+   outcomes, recurring failures, preferences, and open risks.
+4. Store candidates in a separate learned-context system only after they have
+   explicit provenance and a correction/supersession policy.
+5. Evaluate whether a fresh task becomes more accurate without injecting stale
+   claims. Current checkout and repository docs always win conflicts.
 
 ## Exit criteria
 
-Do not call the system useful merely because services are running. It should
-make fresh tasks faster or more accurate while retaining inspectable evidence,
-bounded context, graceful failure, and clear correction paths.
+Do not call the system useful merely because services are running. Archive/search
+must make historical investigation faster while retaining inspectable evidence,
+bounded retrieval, graceful failure, and clear rebuild paths. Any future learned
+context must additionally demonstrate that it improves fresh tasks without
+misrepresenting current project state.

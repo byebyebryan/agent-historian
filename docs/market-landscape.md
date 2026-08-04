@@ -9,20 +9,20 @@ implementation.
 
 | Project | Best role | Strength | Limitation in this architecture |
 | --- | --- | --- | --- |
-| [MemPalace](https://github.com/MemPalace/mempalace) | Evidence retrieval | Semantic/keyword retrieval over source material with provenance-oriented workflow | It is not the primary learned-memory layer. |
-| [Hindsight](https://github.com/vectorize-io/hindsight) | Learned context | Retain, recall, and consolidation of facts, experiences, entities, and observations | Requires deliberate scope, model, concurrency, and correction policy. |
+| [MemPalace](https://github.com/MemPalace/mempalace) | Agent Bookkeeper archive/search backend | Semantic/keyword retrieval over source material with provenance-oriented workflow | Derived index; canonical evidence remains the Bookkeeper archive. |
+| [Hindsight](https://github.com/vectorize-io/hindsight) | Optional curated learned context | Retain, recall, and consolidation of facts, experiences, entities, and observations | Transcript-only extraction does not model mutable repository state; revisit only with agent-led, evidence-backed curation. |
 | [AgentMemory](https://github.com/rohitg00/agentmemory) | Integrated coding-agent memory | Rich lifecycle/tool/file capture, replay-like history, and learned summaries | Overlaps materially with the separate raw archive and retrieval layer; retain as a comparison candidate. |
 | [Mem0](https://github.com/mem0ai/mem0) | Custom memory API | Straightforward add/search/update/delete memory interface | Pushes more ingestion, scope, and recall design into the caller. |
 | Syncthing, rsync, rdiff-backup | File replication/recovery | Mature transport and retention primitives | They do not define session identity, consumer cursors, or learned-memory policy. |
 
 ## Current conclusion
 
-Use a dedicated session-evidence data plane first. Pair it with a retrieval
-pilot before enabling automatic learned memory. Hindsight is the leading
-learned-context candidate because its responsibilities are meaningfully
-different from evidence retrieval. AgentMemory remains the strongest
-all-in-one comparison if detailed tool/file timelines prove more valuable than
-the layered boundary.
+Use Agent Bookkeeper with an archive/search backend first. That is a complete
+and useful product without a learned-memory dependency. Hindsight remains a
+separate candidate for deliberate, agent-led curation rather than an automatic
+Bookkeeper transcript consumer. AgentMemory remains the strongest all-in-one
+comparison if detailed tool/file timelines prove more valuable than the layered
+boundary.
 
 ## Evaluation questions
 

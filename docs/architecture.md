@@ -9,8 +9,8 @@ The system needs to answer two different questions:
 
 1. **What actually happened?** Retrieve original session evidence with a path,
    revision, and location that can be inspected.
-2. **What should a new task know?** Recall a small, relevant set of durable
-   decisions, preferences, experiences, and open questions.
+2. **What should a new task know?** Assemble a bounded briefing from the current
+   checkout, repository guidance, and only then durable, source-backed history.
 
 ## Layering
 
@@ -20,15 +20,19 @@ Authoritative project state
                      |
                      v
 Agent Bookkeeper
-  raw session archive, revision ledger, delivery to consumers
-            |                              |
-            v                              v
-Evidence retrieval                     Learned context
-MemPalace or equivalent                Hindsight or equivalent
-verbatim search + provenance           retain, recall, consolidation
-            |                              |
-            +-------------> Agent task <---+
-                         bounded context
+  raw session archive, revision ledger, archive indexing, and provenance search
+            |
+            v
+      evidence retrieval
+      MemPalace initially
+            |
+            v
+        Agent task
+
+Authoritative project state
+  current checkout, tests, documentation, ADRs, repository instructions
+            |
+            +---------------------------> Agent task
 ```
 
 Agent Historian defines the policy and integration boundaries across these
@@ -41,7 +45,7 @@ layers. It does not make a search index or a learned-memory database canonical.
 | Project state | Repository and operator-owned sources | Never replace with learned memory. |
 | Raw sessions | Bookkeeper archive plus the original client source until archive recovery is accepted | Preserve exact bytes and revisions. |
 | Evidence retrieval | Derived index | Rebuild from raw sessions. |
-| Learned context | Derived interpretation | Rebuild or correct from source evidence; optionally back up if it later becomes operationally valuable. |
+| Optional learned context | Derived interpretation | Rebuild or correct from source evidence; never treat as current project state. |
 
 Every learned or retrieved item should preserve a source reference. A source
 reference identifies enough information to find the original session revision,
@@ -57,37 +61,27 @@ projection and remain unable to mutate the archive.
 
 ### Learned context
 
-Use a learned-memory system for bounded prompt-time recall, project conventions,
-repeated failures, temporal facts, and consolidated observations. It must:
-
-- use project-scoped banks by default;
-- retain bounded user/assistant content, with raw tool output excluded unless a
-  policy explicitly allows it;
-- limit recall injection and local-model concurrency;
-- fail open on timeout or service failure; and
-- preserve provenance to the Bookkeeper session/revision.
-
-The initial Hindsight pilot additionally keeps consolidation and automatic
-prompt injection off. Hindsight receives rendered message roles through a
-separate Bookkeeper consumer cursor, not raw archive filesystem access. Its
-stable document ID is the Bookkeeper record source ID, so an acknowledgement
-retry or later record revision is an explicit replace/upsert rather than a
-duplicate. A shared pilot bank may use project tags for manual retrieval, but
-hard project isolation requires distinct banks before any automatic recall is
-enabled.
+Do not derive long-horizon project context by automatically mining raw
+transcripts alone. A later learned-context workflow begins with an agent that
+can inspect the relevant current checkout, documentation, validation results,
+and retrieved source history. It submits small, revision-scoped memory
+candidates—decisions, outcomes, recurring failures, or open risks—with direct
+evidence references. A learned-memory system may then store or consolidate
+those candidates, but it is not a Bookkeeper consumer and it is never the
+authority for current code.
 
 ### Transport and archive
 
-Bookkeeper is the only component that accepts canonical session bytes. Retrieval
-and learning consumers receive committed revisions and keep independent cursors.
-They must not compete to install their own opaque client-side transcript capture
-or make a source tree mutable.
+Bookkeeper is the only component that accepts canonical session bytes. Its
+archive-search backend receives committed revisions and must not compete to
+install its own opaque client-side transcript capture or make a source tree
+mutable. Any optional learned-context workflow uses Bookkeeper retrieval as
+evidence; it does not receive an archive-delivery cursor by default.
 
 ## Non-goals
 
 - Replacing Git, code review, ADRs, or repository instructions.
 - Treating a semantic search result as authoritative without source inspection.
 - Uploading complete transcript history into every prompt.
+- Treating transcript mining as an automatically correct model of a repository.
 - Coupling a personal deployment topology to this reusable design.
-- Enabling automatic learned-memory extraction before archive, scope, and
-  failure behavior are demonstrated in real work.

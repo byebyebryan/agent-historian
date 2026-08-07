@@ -39,6 +39,7 @@ deliberate agent curation over current project state and source evidence.
 
 - [Architecture](docs/architecture.md)
 - [Archive-search pivot and learned-context boundary](docs/archive-search-pivot.md)
+- [Research and decision lineage](docs/research-lineage.md)
 - [Market landscape](docs/market-landscape.md)
 - [Adoption plan](docs/adoption-plan.md)
 

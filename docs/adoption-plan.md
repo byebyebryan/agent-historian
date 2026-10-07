@@ -1,5 +1,11 @@
 # Adoption Plan
 
+> **Retired — October 7, 2026.** Development and adoption of the custom Agent
+> Historian / Agent Bookkeeper / MemPalace stack have ended. This repository
+> preserves the research, implementation, and unfinished plans as historical
+> material; they are not an active roadmap or deployment instructions. Native
+> agent memory and local session history remain outside this retirement.
+
 ## Phase 1: evidence first
 
 1. Configure an operator-supplied durable store and a Bookkeeper client for one

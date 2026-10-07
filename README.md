@@ -1,5 +1,11 @@
 # Agent Historian
 
+> **Retired — October 7, 2026.** Development and adoption of the custom Agent
+> Historian / Agent Bookkeeper / MemPalace stack have ended. This repository
+> preserves the research, implementation, and unfinished plans as historical
+> material; they are not an active roadmap or deployment instructions. Native
+> agent memory and local session history remain outside this retirement.
+
 Agent Historian is a reusable architecture and integration project for
 cross-session agent continuity.
 
